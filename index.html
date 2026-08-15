@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIPHERA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Caveat:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Bebas+Neue&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #050505;
+    --tar: #0a0a0a;
+    --soot: #111111;
+    --ash: #1a1a1a;
+    --char: #242424;
+    --rust: #3d1a1a;
+    --wine: #4a0a0a;
+    --blood: #5c0f0f;
+    --gore: #6b1515;
+    --rose: #7a2020;
+    --ember: #8f2e2e;
+    --flesh: #a04040;
+    --bone: #b8b0a0;
+    --cream: #c9c0b0;
+    --parchment: #d4caba;
+    --dust: #5c5648;
+    --smoke: #3a3530;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--bone);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== VIDEO BACKGROUND - STREAMABLE ===== */
+  .video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    background: var(--void);
+  }
+
+  .video-bg iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw;
+    min-height: 100vh;
+    min-width: 177.77vh;
+    transform: translate(-50%, -50%);
+    border: none;
+    opacity: 0.3;
+    filter: grayscale(0.4) contrast(1.4) brightness(0.5) saturate(0.7);
+  }
+
+  /* Dark overlay on video */
+  .video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(5, 5, 5, 0.92) 0%,
+      rgba(5, 5, 5, 0.84) 25%,
+      rgba(5, 5, 5, 0.78) 55%,
+      rgba(5, 5, 5, 0.88) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Vignette */
+  .vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(5, 5, 5, 0.75) 100%);
+  }
+
+  /* ===== HEAVY GRAIN & TEXTURE ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+
+  /* Scan lines */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.025;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(180, 170, 150, 0.03) 2px,
+      rgba(180, 170, 150, 0.03) 4px
+    );
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes reveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes revealTilt {
+    from { opacity: 0; transform: translateY(25px) rotate(-1.5deg); }
+    to { opacity: 1; transform: translateY(0) rotate(-0.5deg); }
+  }
+  @keyframes revealRight {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(90, 30, 30, 0.4); }
+    50% { opacity: 0.5; box-shadow: 0 0 2px rgba(90, 30, 30, 0.1); }
+  }
+
+  .anim-reveal { opacity: 0; animation: reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .anim-tilt { opacity: 0; animation: revealTilt 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .anim-right { opacity: 0; animation: revealRight 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .d1 { animation-delay: 0.1s; }
+  .d3 { animation-delay: 0.5s; }
+  .d4 { animation-delay: 0.7s; }
+  .d5 { animation-delay: 0.9s; }
+  .d6 { animation-delay: 1.1s; }
+  .d7 { animation-delay: 1.3s; }
+
+  /* ===== LAYOUT ===== */
+  .page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px 22px 90px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    padding: 20px 0 80px;
+  }
+
+  .hero-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+    opacity: 0.5;
+  }
+  .hero-top-line {
+    flex: 1;
+    height: 1px;
+    background: repeating-linear-gradient(90deg, var(--char), var(--char) 3px, transparent 3px, transparent 6px);
+    max-width: 120px;
+  }
+  .hero-top-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--dust);
+  }
+
+  .hero-cross {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    opacity: 0.12;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-cross svg {
+    filter: drop-shadow(2px 2px 0 var(--blood));
+  }
+
+  .name-block {
+    position: relative;
+    display: inline-block;
+    margin-left: -6px;
+  }
+  .name-shadow {
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    font-family: 'Abril Fatface', serif;
+    font-size: clamp(64px, 18vw, 100px);
+    line-height: 0.88;
+    color: var(--blood);
+    opacity: 0.12;
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: -0.02em;
+  }
+  .name-main {
+    font-family: 'Abril Fatface', serif;
+    font-size: clamp(64px, 18vw, 100px);
+    line-height: 0.88;
+    color: var(--parchment);
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+  }
+  .name-bang {
+    font-family: 'Caveat', cursive;
+    font-size: 0.5em;
+    color: var(--gore);
+    vertical-align: super;
+    margin-right: 2px;
+    display: inline-block;
+    transform: rotate(-12deg);
+  }
+  .name-chroma {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: 'Abril Fatface', serif;
+    font-size: clamp(64px, 18vw, 100px);
+    line-height: 0.88;
+    color: var(--rose);
+    opacity: 0.06;
+    z-index: 1;
+    pointer-events: none;
+    transform: translate(2px, 1px);
+    letter-spacing: -0.02em;
+    mix-blend-mode: screen;
+  }
+
+  .hero-meta {
+    margin-top: 20px;
+    margin-left: 4px;
+  }
+  .hero-handle {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--dust);
+    letter-spacing: 0.08em;
+  }
+  .hero-tagline {
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    color: var(--bone);
+    opacity: 0.7;
+    margin-top: 6px;
+    transform: rotate(-1deg);
+    transform-origin: left center;
+  }
+  .hero-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    margin-left: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--dust);
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    background: #2a5c2a;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(42, 92, 42, 0.5);
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  .stamp {
+    position: absolute;
+    top: 100px;
+    right: -15px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: var(--soot);
+    border: 2px solid var(--char);
+    padding: 6px 10px;
+    transform: rotate(8deg);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .stamp::before {
+    content: 'EXPLICIT';
+    display: block;
+    font-size: 7px;
+    letter-spacing: 0.15em;
+    color: var(--dust);
+    margin-bottom: 2px;
+    border-bottom: 1px solid var(--char);
+    padding-bottom: 2px;
+  }
+
+  .scribble-star {
+    position: absolute;
+    top: 160px;
+    left: -30px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .scribble-heart {
+    position: absolute;
+    bottom: 40px;
+    right: 0;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .scribble-arrow {
+    position: absolute;
+    top: 80px;
+    right: 70px;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+    transform: rotate(-25deg);
+  }
+
+  .tape {
+    position: absolute;
+    background: rgba(200, 190, 170, 0.06);
+    pointer-events: none;
+    z-index: 4;
+  }
+  .tape-1 {
+    top: 45px;
+    left: -25px;
+    width: 55px;
+    height: 16px;
+    transform: rotate(-28deg);
+  }
+  .tape-2 {
+    bottom: 65px;
+    right: -5px;
+    width: 40px;
+    height: 14px;
+    transform: rotate(18deg);
+  }
+
+  /* ===== SECTIONS ===== */
+  .section {
+    margin-bottom: 60px;
+    position: relative;
+  }
+  .sec-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--blood);
+    opacity: 0.15;
+    line-height: 0.85;
+    margin-bottom: -8px;
+    letter-spacing: 0.02em;
+  }
+  .sec-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dust);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sec-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--rust), transparent);
+    max-width: 80px;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-box {
+    background: linear-gradient(160deg, rgba(8, 8, 8, 0.75), rgba(4, 4, 4, 0.9));
+    border: 1px solid var(--char);
+    padding: 26px 24px;
+    position: relative;
+    margin-left: -3px;
+    backdrop-filter: blur(2px);
+  }
+  .about-box::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 18px;
+    width: 50px;
+    height: 2.5px;
+    background: var(--gore);
+  }
+  .about-box::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border-right: 1.5px solid var(--rose);
+    border-bottom: 1.5px solid var(--rose);
+    opacity: 0.35;
+  }
+  .about-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--bone);
+    opacity: 0.88;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+    padding: 5px 14px;
+    border: 1px solid var(--char);
+    color: var(--dust);
+    background: rgba(6, 6, 6, 0.6);
+    position: relative;
+    transition: all 0.25s ease;
+  }
+  .tag::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 6px;
+    height: 6px;
+    border-top: 1.5px solid var(--gore);
+    border-left: 1.5px solid var(--gore);
+  }
+  .tag::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 6px;
+    height: 6px;
+    border-bottom: 1.5px solid var(--gore);
+    border-right: 1.5px solid var(--gore);
+  }
+  .tag:hover {
+    border-color: var(--rose);
+    color: var(--parchment);
+    transform: translateY(-2px) rotate(-0.8deg);
+  }
+
+  /* ===== CURRENTLY ===== */
+  .currently-wrap {
+    position: relative;
+    margin-left: 6px;
+  }
+  .currently-box {
+    background: linear-gradient(170deg, rgba(12, 12, 12, 0.7), rgba(4, 4, 4, 0.85));
+    border-left: 3px solid var(--gore);
+    padding: 28px 26px;
+    position: relative;
+    backdrop-filter: blur(2px);
+  }
+  .currently-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gore), transparent 50%);
+  }
+  .currently-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gore), transparent);
+  }
+  .currently-title {
+    font-family: 'Abril Fatface', serif;
+    font-size: 26px;
+    color: var(--parchment);
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .currently-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--dust);
+    margin-bottom: 20px;
+    transform: rotate(-0.5deg);
+    transform-origin: left center;
+  }
+  .currently-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--rose);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .currently-status::before {
+    content: '';
+    width: 28px;
+    height: 1.5px;
+    background: var(--gore);
+  }
+  .hand-note {
+    position: absolute;
+    top: -16px;
+    right: 16px;
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--rose);
+    opacity: 0.4;
+    transform: rotate(10deg);
+    pointer-events: none;
+  }
+  .ink-blot {
+    position: absolute;
+    bottom: -20px;
+    right: -10px;
+    width: 60px;
+    height: 60px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== LINKS ===== */
+  .link-list {
+    list-style: none;
+  }
+  .link-list li {
+    position: relative;
+    border-bottom: 1px solid rgba(36, 36, 36, 0.5);
+  }
+  .link-item {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 16px 4px;
+    text-decoration: none;
+    color: var(--bone);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .link-item:hover {
+    color: var(--parchment);
+    padding-left: 8px;
+  }
+  .link-item:hover .link-num {
+    color: var(--gore);
+  }
+  .link-item:hover .link-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+  .link-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--dust);
+    opacity: 0.4;
+    line-height: 1;
+    min-width: 36px;
+    transition: color 0.2s ease;
+  }
+  .link-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .link-arrow {
+    margin-left: auto;
+    font-size: 14px;
+    color: var(--dust);
+    opacity: 0;
+    transition: all 0.2s ease;
+  }
+
+  /* ===== SPOTIFY ===== */
+  .spotify-box {
+    border: 1px solid var(--char);
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(8, 8, 8, 0.65), rgba(4, 4, 4, 0.8));
+    position: relative;
+    margin-top: 10px;
+    backdrop-filter: blur(2px);
+  }
+  .spotify-box::before {
+    content: 'SIDE A';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--dust);
+    background: transparent;
+    padding: 0 10px;
+  }
+  .spotify-box::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    border-top: 1.5px solid var(--rose);
+    border-right: 1.5px solid var(--rose);
+    opacity: 0.25;
+  }
+  .spotify-embed iframe {
+    width: 100%;
+    height: 152px;
+    border: none;
+    display: block;
+    border-radius: 2px;
+  }
+  .vinyl-note {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    color: var(--dust);
+    opacity: 0.35;
+    margin-top: 10px;
+    margin-left: 4px;
+    transform: rotate(-1deg);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid var(--char);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+  }
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 40px;
+    height: 2.5px;
+    background: var(--gore);
+  }
+  .footer-left {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--dust);
+  }
+  .footer-right {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    color: var(--dust);
+    opacity: 0.3;
+    transform: rotate(2deg);
+  }
+
+  /* ===== MICRO DETAILS ===== */
+  .micro {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    color: var(--dust);
+    opacity: 0.12;
+  }
+  .m1 { top: 220px; right: -55px; transform: rotate(90deg); }
+  .m2 { top: 480px; left: -45px; }
+  .m3 { bottom: 340px; right: -40px; transform: rotate(-6deg); }
+  .m4 { top: 760px; left: -35px; transform: rotate(90deg); }
+  .m5 { bottom: 160px; right: -30px; }
+
+  /* ===== SCRATCHES & HALFTONE ===== */
+  .scratch {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.04;
+    background: var(--bone);
+  }
+  .sc1 { top: 10%; left: 2%; width: 120px; height: 1.5px; transform: rotate(-15deg); }
+  .sc2 { top: 50%; right: 4%; width: 80px; height: 1px; transform: rotate(20deg); }
+  .sc3 { bottom: 15%; left: 6%; width: 60px; height: 1px; transform: rotate(-8deg); }
+  .sc4 { top: 30%; left: 0%; width: 50px; height: 0.8px; transform: rotate(40deg); }
+  .sc5 { bottom: 40%; right: 1%; width: 70px; height: 1.2px; transform: rotate(-30deg); }
+
+  .halftone {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.03;
+    background-image: radial-gradient(circle, var(--bone) 1.5px, transparent 1.5px);
+    background-size: 12px 12px;
+  }
+  .ht1 { top: 5%; right: 3%; width: 200px; height: 200px; }
+  .ht2 { bottom: 10%; left: 1%; width: 160px; height: 160px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    .page { padding: 30px 16px 50px; }
+    .name-main, .name-shadow, .name-chroma { font-size: clamp(52px, 17vw, 70px); }
+    .hero-cross { right: 0; top: 0; }
+    .scribble-star { left: -5px; }
+    .scribble-heart { right: 5px; }
+    .scribble-arrow { right: 30px; }
+    .stamp { right: 0; top: 80px; }
+    .micro { display: none; }
+    .section { margin-bottom: 48px; }
+    .about-box { margin-left: 0; }
+    .currently-wrap { margin-left: 0; }
+    .sec-num { font-size: 40px; }
+  }
+  @media (max-width: 400px) {
+    .name-main, .name-shadow, .name-chroma { font-size: 48px; }
+    .currently-title { font-size: 22px; }
+  }
+
+  ::selection { background: var(--wine); color: var(--parchment); }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--void); }
+  ::-webkit-scrollbar-thumb { background: var(--char); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- VIDEO BACKGROUND - STREAMABLE -->
+<div class="video-bg">
+  <iframe 
+    src="https://streamable.com/e/9whoio?autoplay=1&muted=1&nocontrols=1" 
+    allow="fullscreen;autoplay" 
+    allowfullscreen
+    frameborder="0"
+    scrolling="no">
+  </iframe>
+</div>
+
+<!-- DARK OVERLAY ON VIDEO -->
+<div class="video-overlay"></div>
+
+<!-- VIGNETTE -->
+<div class="vignette"></div>
+
+<!-- Scratches -->
+<div class="scratch sc1"></div>
+<div class="scratch sc2"></div>
+<div class="scratch sc3"></div>
+<div class="scratch sc4"></div>
+<div class="scratch sc5"></div>
+
+<!-- Halftone -->
+<div class="halftone ht1"></div>
+<div class="halftone ht2"></div>
+
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero anim-reveal d1">
+
+    <svg class="hero-cross" width="80" height="110" viewBox="0 0 80 110">
+      <path d="M40 5 Q42 30 40 50 Q38 75 41 105" stroke="var(--bone)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M40 5 Q38 30 40 50 Q42 75 39 105" stroke="var(--gore)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M12 38 Q28 36 40 38 Q52 40 68 37" stroke="var(--bone)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M12 38 Q28 40 40 38 Q52 36 68 39" stroke="var(--gore)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M35 25 L32 32 M45 60 L48 68 M38 85 L35 92" stroke="var(--rose)" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.4"/>
+    </svg>
+
+    <svg class="scribble-star" width="42" height="42" viewBox="0 0 42 42">
+      <path d="M21 4 L24 16 L36 16 L26 23 L29 35 L21 28 L13 35 L16 23 L6 16 L18 16 Z" 
+        stroke="var(--bone)" stroke-width="1" fill="none" stroke-linejoin="round"/>
+      <path d="M21 8 L23 16 L31 16 L24 21 L26 29 L21 25 L16 29 L18 21 L11 16 L19 16 Z" 
+        stroke="var(--gore)" stroke-width="0.5" fill="none" stroke-linejoin="round" opacity="0.4"/>
+      <circle cx="21" cy="21" r="2" fill="var(--gore)" opacity="0.3"/>
+    </svg>
+
+    <svg class="scribble-heart" width="38" height="34" viewBox="0 0 38 34">
+      <path d="M19 29 C19 29 5 20 5 13 C5 8 8 5 12 5 C15 5 17 7 19 10" 
+        stroke="var(--bone)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M19 10 C21 7 23 5 26 5 C30 5 33 8 33 13 C33 20 19 29 19 29" 
+        stroke="var(--bone)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M19 10 L17 15 L19 18 L17 22" stroke="var(--gore)" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <path d="M14 14 L16 16 M22 14 L24 16" stroke="var(--gore)" stroke-width="0.6" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <svg class="scribble-arrow" width="45" height="28" viewBox="0 0 45 28">
+      <path d="M5 14 Q18 6 30 14 T42 12" stroke="var(--bone)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+      <path d="M36 7 L42 12 L37 17" stroke="var(--bone)" stroke-width="0.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+    <div class="tape tape-1"></div>
+    <div class="tape tape-2"></div>
+
+    <div class="stamp">CONTENT<br>WARNINg</div>
+
+    <div class="hero-top">
+      <span class="hero-top-text">Personal Page / 2026</span>
+      <div class="hero-top-line"></div>
+    </div>
+
+    <div class="name-block">
+      <div class="name-shadow">!CIPHERA</div>
+      <div class="name-chroma">!CIPHERA</div>
+      <h1 class="name-main">
+        <span class="name-bang">!</span>CIPHERA
+      </h1>
+    </div>
+
+    <div class="hero-meta">
+      <div class="hero-handle">cipherazz · she/her</div>
+      <div class="hero-tagline">building things, breaking things and learning along the way.</div>
+    </div>
+
+    <div class="hero-status">
+      <span class="status-dot"></span>
+      ONLINE
+    </div>
+  </header>
+
+  <div class="micro m1">NO SIGNAL</div>
+  <div class="micro m2">EST. 2026</div>
+  <div class="micro m3">SACRED / PROFANE</div>
+  <div class="micro m4">SIDE B</div>
+  <div class="micro m5">PLAY LOUD</div>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section anim-tilt d3">
+    <div class="sec-num">01</div>
+    <div class="sec-label">About Me</div>
+    <div class="about-box">
+      <p class="about-text">
+        software, security and whatever interesting project happens to catch my attention.
+      </p>
+      <div class="tag-row">
+        <span class="tag">rust</span>
+        <span class="tag">python</span>
+        <span class="tag">elixir</span>
+        <span class="tag">unity bypass</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CURRENTLY ===== -->
+  <section class="section anim-right d4">
+    <div class="sec-num">02</div>
+    <div class="sec-label">Currently</div>
+    <div class="currently-wrap">
+      <div class="hand-note">(don't rush me)</div>
+      <div class="currently-box">
+        <div class="currently-title">currently building</div>
+        <div class="currently-sub">something worth shipping.</div>
+        <div class="currently-status">IN PROGRESS</div>
+      </div>
+      <svg class="ink-blot" viewBox="0 0 60 60">
+        <ellipse cx="30" cy="30" rx="25" ry="20" fill="var(--gore)" opacity="0.6"/>
+        <ellipse cx="22" cy="25" rx="8" ry="6" fill="var(--gore)" opacity="0.4"/>
+        <ellipse cx="38" cy="35" rx="10" ry="8" fill="var(--gore)" opacity="0.5"/>
+        <ellipse cx="30" cy="18" rx="6" ry="4" fill="var(--gore)" opacity="0.3"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== LINKS ===== -->
+  <section class="section anim-reveal d5">
+    <div class="sec-num">03</div>
+    <div class="sec-label">Links</div>
+    <ul class="link-list">
+      <li>
+        <a href="https://github.com/c1pheraxx" target="_blank" rel="noopener" class="link-item">
+          <span class="link-num">01</span>
+          <span class="link-name">Github</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="https://discord.gg/dsPDQZYJU" target="_blank" rel="noopener" class="link-item">
+          <span class="link-num">02</span>
+          <span class="link-name">Discord</span>
+          <span class="link-arrow">→</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===== SPOTIFY ===== -->
+  <section class="section anim-reveal d6">
+    <div class="sec-num">04</div>
+    <div class="sec-label">Now Playing</div>
+    <div class="spotify-box">
+      <div class="spotify-embed">
+        <iframe 
+          src="https://open.spotify.com/embed/track/0ByTfwoYWdom6GlQ9BIdv2?utm_source=generator&theme=0" 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+    <div class="vinyl-note">skip if you want, i don't care</div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer anim-reveal d7">
+    <div class="footer-left">CIPHERA © 2026</div>
+    <div class="footer-right">made at 3am probably</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
