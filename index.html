@@ -43,64 +43,44 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== VIDEO BACKGROUND - STREAMABLE ===== */
+  /* ===== VIDEO BACKGROUND ===== */
   .video-bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
     background: var(--void);
   }
-
   .video-bg iframe {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 56.25vw;
-    min-height: 100vh;
-    min-width: 177.77vh;
+    top: 50%; left: 50%;
+    width: 100vw; height: 56.25vw;
+    min-height: 100vh; min-width: 177.77vh;
     transform: translate(-50%, -50%);
     border: none;
     opacity: 0.3;
     filter: grayscale(0.4) contrast(1.4) brightness(0.5) saturate(0.7);
   }
-
-  /* Dark overlay on video */
   .video-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 1;
-    background: linear-gradient(
-      180deg,
-      rgba(5, 5, 5, 0.92) 0%,
-      rgba(5, 5, 5, 0.84) 25%,
-      rgba(5, 5, 5, 0.78) 55%,
-      rgba(5, 5, 5, 0.88) 100%
-    );
+    background: linear-gradient(180deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.84) 25%, rgba(5,5,5,0.78) 55%, rgba(5,5,5,0.88) 100%);
     pointer-events: none;
   }
-
-  /* Vignette */
   .vignette {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 2;
     pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 30%, rgba(5, 5, 5, 0.75) 100%);
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(5,5,5,0.75) 100%);
   }
 
-  /* ===== HEAVY GRAIN & TEXTURE ===== */
+  /* Grain & scanlines */
   body::before {
     content: '';
     position: fixed;
@@ -113,8 +93,6 @@
     background-repeat: repeat;
     background-size: 200px 200px;
   }
-
-  /* Scan lines */
   body::after {
     content: '';
     position: fixed;
@@ -123,13 +101,7 @@
     pointer-events: none;
     z-index: 9998;
     opacity: 0.025;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(180, 170, 150, 0.03) 2px,
-      rgba(180, 170, 150, 0.03) 4px
-    );
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(180,170,150,0.03) 2px, rgba(180,170,150,0.03) 4px);
   }
 
   /* ===== ANIMATIONS ===== */
@@ -146,19 +118,19 @@
     to { opacity: 1; transform: translateX(0); }
   }
   @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(90, 30, 30, 0.4); }
-    50% { opacity: 0.5; box-shadow: 0 0 2px rgba(90, 30, 30, 0.1); }
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(90,30,30,0.4); }
+    50% { opacity: 0.5; box-shadow: 0 0 2px rgba(90,30,30,0.1); }
   }
-
-  .anim-reveal { opacity: 0; animation: reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-  .anim-tilt { opacity: 0; animation: revealTilt 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-  .anim-right { opacity: 0; animation: revealRight 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .anim-reveal { opacity: 0; animation: reveal 1s cubic-bezier(0.22,1,0.36,1) forwards; }
+  .anim-tilt { opacity: 0; animation: revealTilt 1.1s cubic-bezier(0.22,1,0.36,1) forwards; }
+  .anim-right { opacity: 0; animation: revealRight 0.9s cubic-bezier(0.22,1,0.36,1) forwards; }
   .d1 { animation-delay: 0.1s; }
   .d3 { animation-delay: 0.5s; }
   .d4 { animation-delay: 0.7s; }
   .d5 { animation-delay: 0.9s; }
   .d6 { animation-delay: 1.1s; }
   .d7 { animation-delay: 1.3s; }
+  .d8 { animation-delay: 1.5s; }
 
   /* ===== LAYOUT ===== */
   .page {
@@ -174,7 +146,6 @@
     position: relative;
     padding: 20px 0 80px;
   }
-
   .hero-top {
     display: flex;
     align-items: center;
@@ -195,11 +166,9 @@
     text-transform: uppercase;
     color: var(--dust);
   }
-
   .hero-cross {
     position: absolute;
-    top: -5px;
-    right: -10px;
+    top: -5px; right: -10px;
     opacity: 0.12;
     z-index: 0;
     pointer-events: none;
@@ -207,7 +176,6 @@
   .hero-cross svg {
     filter: drop-shadow(2px 2px 0 var(--blood));
   }
-
   .name-block {
     position: relative;
     display: inline-block;
@@ -215,8 +183,7 @@
   }
   .name-shadow {
     position: absolute;
-    top: 4px;
-    left: 5px;
+    top: 4px; left: 5px;
     font-family: 'Abril Fatface', serif;
     font-size: clamp(64px, 18vw, 100px);
     line-height: 0.88;
@@ -246,8 +213,7 @@
   }
   .name-chroma {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     font-family: 'Abril Fatface', serif;
     font-size: clamp(64px, 18vw, 100px);
     line-height: 0.88;
@@ -259,7 +225,6 @@
     letter-spacing: -0.02em;
     mix-blend-mode: screen;
   }
-
   .hero-meta {
     margin-top: 20px;
     margin-left: 4px;
@@ -291,18 +256,15 @@
     color: var(--dust);
   }
   .status-dot {
-    width: 7px;
-    height: 7px;
+    width: 7px; height: 7px;
     background: #2a5c2a;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(42, 92, 42, 0.5);
+    box-shadow: 0 0 10px rgba(42,92,42,0.5);
     animation: pulse 2.5s ease-in-out infinite;
   }
-
   .stamp {
     position: absolute;
-    top: 100px;
-    right: -15px;
+    top: 100px; right: -15px;
     font-family: 'Oswald', sans-serif;
     font-size: 10px;
     font-weight: 700;
@@ -328,52 +290,48 @@
     padding-bottom: 2px;
   }
 
+  /* CAP Shield */
+  .cap-shield {
+    position: absolute;
+    top: 95px; left: -8px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 3;
+    transition: opacity 0.3s ease;
+  }
+  .hero:hover .cap-shield { opacity: 0.3; }
+  .cap-shield svg { width: 48px; height: 60px; }
+
   .scribble-star {
     position: absolute;
-    top: 160px;
-    left: -30px;
+    top: 160px; left: -30px;
     opacity: 0.15;
     pointer-events: none;
     z-index: 0;
   }
   .scribble-heart {
     position: absolute;
-    bottom: 40px;
-    right: 0;
+    bottom: 40px; right: 0;
     opacity: 0.12;
     pointer-events: none;
     z-index: 0;
   }
   .scribble-arrow {
     position: absolute;
-    top: 80px;
-    right: 70px;
+    top: 80px; right: 70px;
     opacity: 0.1;
     pointer-events: none;
     z-index: 0;
     transform: rotate(-25deg);
   }
-
   .tape {
     position: absolute;
-    background: rgba(200, 190, 170, 0.06);
+    background: rgba(200,190,170,0.06);
     pointer-events: none;
     z-index: 4;
   }
-  .tape-1 {
-    top: 45px;
-    left: -25px;
-    width: 55px;
-    height: 16px;
-    transform: rotate(-28deg);
-  }
-  .tape-2 {
-    bottom: 65px;
-    right: -5px;
-    width: 40px;
-    height: 14px;
-    transform: rotate(18deg);
-  }
+  .tape-1 { top: 45px; left: -25px; width: 55px; height: 16px; transform: rotate(-28deg); }
+  .tape-2 { bottom: 65px; right: -5px; width: 40px; height: 14px; transform: rotate(18deg); }
 
   /* ===== SECTIONS ===== */
   .section {
@@ -411,7 +369,7 @@
 
   /* ===== ABOUT ===== */
   .about-box {
-    background: linear-gradient(160deg, rgba(8, 8, 8, 0.75), rgba(4, 4, 4, 0.9));
+    background: linear-gradient(160deg, rgba(8,8,8,0.75), rgba(4,4,4,0.9));
     border: 1px solid var(--char);
     padding: 26px 24px;
     position: relative;
@@ -421,19 +379,15 @@
   .about-box::before {
     content: '';
     position: absolute;
-    top: -1px;
-    left: 18px;
-    width: 50px;
-    height: 2.5px;
+    top: -1px; left: 18px;
+    width: 50px; height: 2.5px;
     background: var(--gore);
   }
   .about-box::after {
     content: '';
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 24px;
-    height: 24px;
+    bottom: 10px; right: 10px;
+    width: 24px; height: 24px;
     border-right: 1.5px solid var(--rose);
     border-bottom: 1.5px solid var(--rose);
     opacity: 0.35;
@@ -458,27 +412,23 @@
     padding: 5px 14px;
     border: 1px solid var(--char);
     color: var(--dust);
-    background: rgba(6, 6, 6, 0.6);
+    background: rgba(6,6,6,0.6);
     position: relative;
     transition: all 0.25s ease;
   }
   .tag::before {
     content: '';
     position: absolute;
-    top: -1px;
-    left: -1px;
-    width: 6px;
-    height: 6px;
+    top: -1px; left: -1px;
+    width: 6px; height: 6px;
     border-top: 1.5px solid var(--gore);
     border-left: 1.5px solid var(--gore);
   }
   .tag::after {
     content: '';
     position: absolute;
-    bottom: -1px;
-    right: -1px;
-    width: 6px;
-    height: 6px;
+    bottom: -1px; right: -1px;
+    width: 6px; height: 6px;
     border-bottom: 1.5px solid var(--gore);
     border-right: 1.5px solid var(--gore);
   }
@@ -494,7 +444,7 @@
     margin-left: 6px;
   }
   .currently-box {
-    background: linear-gradient(170deg, rgba(12, 12, 12, 0.7), rgba(4, 4, 4, 0.85));
+    background: linear-gradient(170deg, rgba(12,12,12,0.7), rgba(4,4,4,0.85));
     border-left: 3px solid var(--gore);
     padding: 28px 26px;
     position: relative;
@@ -503,19 +453,15 @@
   .currently-box::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
+    top: 0; left: 0;
+    width: 100%; height: 1px;
     background: linear-gradient(90deg, var(--gore), transparent 50%);
   }
   .currently-box::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60%;
-    height: 1px;
+    bottom: 0; left: 0;
+    width: 60%; height: 1px;
     background: linear-gradient(90deg, var(--gore), transparent);
   }
   .currently-title {
@@ -544,14 +490,12 @@
   }
   .currently-status::before {
     content: '';
-    width: 28px;
-    height: 1.5px;
+    width: 28px; height: 1.5px;
     background: var(--gore);
   }
   .hand-note {
     position: absolute;
-    top: -16px;
-    right: 16px;
+    top: -16px; right: 16px;
     font-family: 'Caveat', cursive;
     font-size: 14px;
     color: var(--rose);
@@ -561,22 +505,18 @@
   }
   .ink-blot {
     position: absolute;
-    bottom: -20px;
-    right: -10px;
-    width: 60px;
-    height: 60px;
+    bottom: -20px; right: -10px;
+    width: 60px; height: 60px;
     opacity: 0.08;
     pointer-events: none;
     z-index: 0;
   }
 
   /* ===== LINKS ===== */
-  .link-list {
-    list-style: none;
-  }
+  .link-list { list-style: none; }
   .link-list li {
     position: relative;
-    border-bottom: 1px solid rgba(36, 36, 36, 0.5);
+    border-bottom: 1px solid rgba(36,36,36,0.5);
   }
   .link-item {
     display: flex;
@@ -592,9 +532,7 @@
     color: var(--parchment);
     padding-left: 8px;
   }
-  .link-item:hover .link-num {
-    color: var(--gore);
-  }
+  .link-item:hover .link-num { color: var(--gore); }
   .link-item:hover .link-arrow {
     opacity: 1;
     transform: translateX(3px);
@@ -623,7 +561,7 @@
     transition: all 0.2s ease;
   }
 
-  /* ===== DISCORD JINX SCRIBBLE ===== */
+  /* ===== DISCORD JINX ===== */
   .discord-jinx {
     position: relative;
     display: flex;
@@ -635,25 +573,16 @@
     transition: all 0.2s ease;
     cursor: pointer;
   }
-
-  .discord-jinx:hover {
-    padding-left: 8px;
-  }
-
-  .discord-jinx:hover .link-num {
-    color: var(--gore);
-  }
-
+  .discord-jinx:hover { padding-left: 8px; }
+  .discord-jinx:hover .link-num { color: var(--gore); }
   .discord-jinx:hover .link-arrow {
     opacity: 1;
     transform: translateX(3px);
   }
-
   .jinx-text-wrap {
     position: relative;
     display: inline-block;
   }
-
   .jinx-name {
     font-family: 'Oswald', sans-serif;
     font-size: 15px;
@@ -665,29 +594,18 @@
     z-index: 2;
     transition: color 0.3s ease;
   }
-
-  .discord-jinx:hover .jinx-name {
-    color: var(--parchment);
-  }
-
-  /* Scribble SVG - hidden by default, draws on hover */
+  .discord-jinx:hover .jinx-name { color: var(--parchment); }
   .jinx-scribble {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 130%;
-    height: 220%;
+    width: 130%; height: 220%;
     pointer-events: none;
     z-index: 3;
     opacity: 0;
     transition: opacity 0.1s ease;
   }
-
-  .discord-jinx:hover .jinx-scribble {
-    opacity: 1;
-  }
-
+  .discord-jinx:hover .jinx-scribble { opacity: 1; }
   .jinx-scribble path {
     stroke: var(--blood);
     stroke-width: 1.6;
@@ -696,22 +614,16 @@
     stroke-dasharray: 300;
     stroke-dashoffset: 300;
   }
-
   .discord-jinx:hover .jinx-scribble path {
     animation: jinx-draw 0.35s ease-out forwards;
   }
-
   .discord-jinx:hover .jinx-scribble path:nth-child(2) { animation-delay: 0.04s; }
   .discord-jinx:hover .jinx-scribble path:nth-child(3) { animation-delay: 0.08s; }
   .discord-jinx:hover .jinx-scribble path:nth-child(4) { animation-delay: 0.02s; }
   .discord-jinx:hover .jinx-scribble path:nth-child(5) { animation-delay: 0.06s; }
   .discord-jinx:hover .jinx-scribble path:nth-child(6) { animation-delay: 0.1s; }
   .discord-jinx:hover .jinx-scribble path:nth-child(7) { animation-delay: 0.12s; }
-
-  @keyframes jinx-draw {
-    to { stroke-dashoffset: 0; }
-  }
-
+  @keyframes jinx-draw { to { stroke-dashoffset: 0; } }
   .jinx-nao-entre {
     font-family: 'Caveat', cursive;
     font-size: 12px;
@@ -725,16 +637,217 @@
     transform-origin: left center;
     transition: opacity 0.25s ease 0.15s;
   }
+  .discord-jinx:hover .jinx-nao-entre { opacity: 0.7; }
 
-  .discord-jinx:hover .jinx-nao-entre {
-    opacity: 0.7;
+  /* ===== RECADOS ===== */
+  .recado-input-wrap {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .recado-meta-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .recado-input-field {
+    flex: 1;
+    background: rgba(8,8,8,0.6);
+    border: 1px solid var(--char);
+    padding: 10px 14px;
+    color: var(--bone);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .recado-input-field::placeholder {
+    color: var(--dust);
+    opacity: 0.5;
+  }
+  .recado-input-field:focus {
+    border-color: var(--rust);
+  }
+  .recado-textarea {
+    width: 100%;
+    background: linear-gradient(160deg, rgba(8,8,8,0.75), rgba(4,4,4,0.9));
+    border: 1px solid var(--char);
+    padding: 18px 20px;
+    color: var(--bone);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .recado-textarea::placeholder {
+    color: var(--dust);
+    opacity: 0.6;
+  }
+  .recado-textarea:focus {
+    border-color: var(--rust);
+  }
+  .recado-btn {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: rgba(92,15,15,0.15);
+    border: 1px solid var(--rust);
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+  }
+  .recado-btn::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 6px; height: 6px;
+    border-top: 1.5px solid var(--gore);
+    border-left: 1.5px solid var(--gore);
+  }
+  .recado-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 6px; height: 6px;
+    border-bottom: 1.5px solid var(--gore);
+    border-right: 1.5px solid var(--gore);
+  }
+  .recado-btn:hover {
+    background: rgba(92,15,15,0.3);
+    border-color: var(--blood);
+    transform: translateY(-1px);
+  }
+  .recado-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .recado-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--dust);
+    margin-top: 12px;
+    min-height: 14px;
+    transition: color 0.3s ease;
+  }
+  .recado-status.ok { color: #2a5c2a; }
+  .recado-status.err { color: var(--blood); }
+
+  .recado-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--rust), transparent);
+    margin: 28px 0 20px;
+    opacity: 0.4;
+  }
+  .recado-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--dust);
+    opacity: 0.35;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .recado-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .recado-item {
+    background: linear-gradient(160deg, rgba(8,8,8,0.6), rgba(4,4,4,0.8));
+    border: 1px solid var(--ash);
+    padding: 20px 22px;
+    position: relative;
+    transition: border-color 0.3s ease;
+    opacity: 0;
+    animation: reveal 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  .recado-item:hover { border-color: var(--char); }
+  .recado-item::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 14px;
+    width: 30px; height: 2px;
+    background: var(--rust);
+    opacity: 0.6;
+  }
+  .recado-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .recado-author {
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--rose);
+  }
+  .recado-author a {
+    color: var(--rose);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .recado-author a:hover {
+    color: var(--parchment);
+  }
+  .recado-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--dust);
+    opacity: 0.5;
+  }
+  .recado-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--bone);
+    opacity: 0.85;
+    word-break: break-word;
+  }
+  .recado-num {
+    position: absolute;
+    top: 8px; right: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--blood);
+    opacity: 0.12;
+    line-height: 1;
+  }
+  .recado-empty {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--dust);
+    opacity: 0.4;
+    text-align: center;
+    padding: 30px 0;
+    transform: rotate(-0.5deg);
+  }
+  .recado-loading {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--dust);
+    opacity: 0.4;
+    text-align: center;
+    padding: 20px 0;
   }
 
   /* ===== SPOTIFY ===== */
   .spotify-box {
     border: 1px solid var(--char);
     padding: 24px;
-    background: linear-gradient(180deg, rgba(8, 8, 8, 0.65), rgba(4, 4, 4, 0.8));
+    background: linear-gradient(180deg, rgba(8,8,8,0.65), rgba(4,4,4,0.8));
     position: relative;
     margin-top: 10px;
     backdrop-filter: blur(2px);
@@ -742,8 +855,7 @@
   .spotify-box::before {
     content: 'SIDE A';
     position: absolute;
-    top: -10px;
-    left: 20px;
+    top: -10px; left: 20px;
     font-family: 'Space Mono', monospace;
     font-size: 8px;
     letter-spacing: 0.3em;
@@ -754,10 +866,8 @@
   .spotify-box::after {
     content: '';
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 10px;
-    height: 10px;
+    top: 8px; right: 8px;
+    width: 10px; height: 10px;
     border-top: 1.5px solid var(--rose);
     border-right: 1.5px solid var(--rose);
     opacity: 0.25;
@@ -792,10 +902,8 @@
   .footer::before {
     content: '';
     position: absolute;
-    top: -1px;
-    left: 0;
-    width: 40px;
-    height: 2.5px;
+    top: -1px; left: 0;
+    width: 40px; height: 2.5px;
     background: var(--gore);
   }
   .footer-left {
@@ -821,8 +929,8 @@
     flex-direction: column;
     align-items: flex-end;
     opacity: 0;
-    animation: reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    animation-delay: 1.5s;
+    animation: reveal 1s cubic-bezier(0.22,1,0.36,1) forwards;
+    animation-delay: 1.7s;
   }
   .signature-line {
     width: 100%;
@@ -836,9 +944,7 @@
     opacity: 0.35;
     transition: opacity 0.3s ease;
   }
-  .signature-wrap:hover .signature-svg {
-    opacity: 0.6;
-  }
+  .signature-wrap:hover .signature-svg { opacity: 0.6; }
   .signature-label {
     font-family: 'Space Mono', monospace;
     font-size: 8px;
@@ -849,7 +955,7 @@
     text-transform: uppercase;
   }
 
-  /* ===== MICRO DETAILS ===== */
+  /* ===== MICRO ===== */
   .micro {
     position: absolute;
     pointer-events: none;
@@ -878,7 +984,6 @@
   .sc3 { bottom: 15%; left: 6%; width: 60px; height: 1px; transform: rotate(-8deg); }
   .sc4 { top: 30%; left: 0%; width: 50px; height: 0.8px; transform: rotate(40deg); }
   .sc5 { bottom: 40%; right: 1%; width: 70px; height: 1.2px; transform: rotate(-30deg); }
-
   .halftone {
     position: fixed;
     pointer-events: none;
@@ -899,12 +1004,15 @@
     .scribble-heart { right: 5px; }
     .scribble-arrow { right: 30px; }
     .stamp { right: 0; top: 80px; }
+    .cap-shield { left: 0; top: 75px; }
+    .cap-shield svg { width: 38px; height: 48px; }
     .micro { display: none; }
     .section { margin-bottom: 48px; }
     .about-box { margin-left: 0; }
     .currently-wrap { margin-left: 0; }
     .sec-num { font-size: 40px; }
     .signature-svg { width: 140px; height: 48px; }
+    .recado-meta-row { flex-direction: column; gap: 10px; }
   }
   @media (max-width: 400px) {
     .name-main, .name-shadow, .name-chroma { font-size: 48px; }
@@ -920,21 +1028,12 @@
 </head>
 <body>
 
-<!-- VIDEO BACKGROUND - STREAMABLE -->
+<!-- VIDEO BACKGROUND -->
 <div class="video-bg">
-  <iframe 
-    src="https://streamable.com/e/9whoio?autoplay=1&muted=1&nocontrols=1" 
-    allow="fullscreen;autoplay" 
-    allowfullscreen
-    frameborder="0"
-    scrolling="no">
-  </iframe>
+  <iframe src="https://streamable.com/e/9whoio?autoplay=1&muted=1&nocontrols=1" 
+    allow="fullscreen;autoplay" allowfullscreen frameborder="0" scrolling="no"></iframe>
 </div>
-
-<!-- DARK OVERLAY ON VIDEO -->
 <div class="video-overlay"></div>
-
-<!-- VIGNETTE -->
 <div class="vignette"></div>
 
 <!-- Scratches -->
@@ -952,7 +1051,6 @@
 
   <!-- ===== HERO ===== -->
   <header class="hero anim-reveal d1">
-
     <svg class="hero-cross" width="80" height="110" viewBox="0 0 80 110">
       <path d="M40 5 Q42 30 40 50 Q38 75 41 105" stroke="var(--bone)" stroke-width="2" fill="none" stroke-linecap="round"/>
       <path d="M40 5 Q38 30 40 50 Q42 75 39 105" stroke="var(--gore)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
@@ -960,6 +1058,25 @@
       <path d="M12 38 Q28 40 40 38 Q52 36 68 39" stroke="var(--gore)" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
       <path d="M35 25 L32 32 M45 60 L48 68 M38 85 L35 92" stroke="var(--rose)" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.4"/>
     </svg>
+
+    <div class="cap-shield">
+      <svg viewBox="0 0 52 64" xmlns="http://www.w3.org/2000/svg">
+        <path d="M26 2 L46 8 L46 28 Q46 46 26 60 Q6 46 6 28 L6 8 Z" 
+          stroke="var(--bone)" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+        <path d="M26 6 L42 11 L42 28 Q42 43 26 55 Q10 43 10 28 L10 11 Z" 
+          stroke="var(--rose)" stroke-width="0.8" fill="none" stroke-linejoin="round" opacity="0.6"/>
+        <path d="M26 14 L28 21 L35 21 L29 25 L31 32 L26 28 L21 32 L23 25 L17 21 L24 21 Z" 
+          stroke="var(--rose)" stroke-width="0.7" fill="none" stroke-linejoin="round" opacity="0.7"/>
+        <path d="M12 18 L20 12 M16 28 L28 18 M20 38 L36 24 M24 48 L42 32" 
+          stroke="var(--blood)" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.4"/>
+        <path d="M18 44 L22 36 L26 44 M20 40 L24 40" 
+          stroke="var(--bone)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <path d="M28 44 L28 36 L32 36 Q34 36 34 38 Q34 40 32 40 L28 40" 
+          stroke="var(--bone)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.5"/>
+        <path d="M36 44 L36 36 L40 36 Q42 36 42 38 Q42 40 40 40 L36 40 M40 40 L42 44" 
+          stroke="var(--bone)" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+    </div>
 
     <svg class="scribble-star" width="42" height="42" viewBox="0 0 42 42">
       <path d="M21 4 L24 16 L36 16 L26 23 L29 35 L21 28 L13 35 L16 23 L6 16 L18 16 Z" 
@@ -996,9 +1113,7 @@
     <div class="name-block">
       <div class="name-shadow">!CIPHERA</div>
       <div class="name-chroma">!CIPHERA</div>
-      <h1 class="name-main">
-        <span class="name-bang">!</span>CIPHERA
-      </h1>
+      <h1 class="name-main"><span class="name-bang">!</span>CIPHERA</h1>
     </div>
 
     <div class="hero-meta">
@@ -1023,9 +1138,7 @@
     <div class="sec-num">01</div>
     <div class="sec-label">About Me</div>
     <div class="about-box">
-      <p class="about-text">
-        software, security and whatever interesting project happens to catch my attention.
-      </p>
+      <p class="about-text">software, security and whatever interesting project happens to catch my attention.</p>
       <div class="tag-row">
         <span class="tag">rust</span>
         <span class="tag">python</span>
@@ -1073,17 +1186,12 @@
           <span class="jinx-text-wrap">
             <span class="jinx-name">discord</span>
             <svg class="jinx-scribble" viewBox="0 0 140 50" preserveAspectRatio="none">
-              <!-- Main chaotic scribbles -->
               <path d="M5 22 Q30 10 55 24 T85 18 Q110 26 135 20" />
               <path d="M8 28 Q35 16 60 30 T90 22 Q115 30 138 24" />
               <path d="M12 18 Q40 32 65 16 T95 26 Q120 16 132 28" />
-              <!-- Cross scribbles -->
               <path d="M25 12 L35 38 M55 10 L50 40 M85 12 L95 38 M110 14 L115 36" />
-              <!-- Diagonal chaos -->
               <path d="M15 35 L45 15 M70 38 L100 14 M120 36 L130 18" />
-              <!-- Small splatter marks -->
               <path d="M18 30 L22 34 M68 12 L72 16 M105 32 L109 36" />
-              <!-- Extra messy line -->
               <path d="M30 20 Q50 28 70 18 T110 24 Q125 20 130 26" />
             </svg>
             <span class="jinx-nao-entre">NAO ENTRE</span>
@@ -1094,24 +1202,43 @@
     </ul>
   </section>
 
-  <!-- ===== SPOTIFY ===== -->
-  <section class="section anim-reveal d6">
+  <!-- ===== RECADOS ===== -->
+  <section class="section anim-reveal d6" id="recados">
     <div class="sec-num">04</div>
+    <div class="sec-label">Deixe um recado</div>
+
+    <div class="recado-input-wrap">
+      <div class="recado-meta-row">
+        <input type="text" id="recado-nome" class="recado-input-field" placeholder="quem é você?" maxlength="30" />
+        <input type="text" id="recado-link" class="recado-input-field" placeholder="@ ou link (opcional)" maxlength="60" />
+      </div>
+      <textarea id="recado-mensagem" class="recado-textarea" placeholder="escreve o que quiser..." maxlength="500"></textarea>
+    </div>
+    <button id="recado-btn" class="recado-btn">enviar recado</button>
+    <div id="recado-status" class="recado-status"></div>
+
+    <div class="recado-divider"></div>
+    <div id="recado-count" class="recado-count">carregando...</div>
+    <div id="recado-feed" class="recado-feed">
+      <div class="recado-loading">conectando ao mural...</div>
+    </div>
+  </section>
+
+  <!-- ===== SPOTIFY ===== -->
+  <section class="section anim-reveal d7">
+    <div class="sec-num">05</div>
     <div class="sec-label">Now Playing</div>
     <div class="spotify-box">
       <div class="spotify-embed">
-        <iframe 
-          src="https://open.spotify.com/embed/track/0ByTfwoYWdom6GlQ9BIdv2?utm_source=generator&theme=0" 
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-          loading="lazy">
-        </iframe>
+        <iframe src="https://open.spotify.com/embed/track/0ByTfwoYWdom6GlQ9BIdv2?utm_source=generator&theme=0" 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
       </div>
     </div>
     <div class="vinyl-note">skip if you want, i don&apos;t care</div>
   </section>
 
   <!-- ===== FOOTER ===== -->
-  <footer class="footer anim-reveal d7">
+  <footer class="footer anim-reveal d8">
     <div class="footer-left">CIPHERA &copy; 2026</div>
     <div class="footer-right">made at 3am probably</div>
   </footer>
@@ -1131,6 +1258,132 @@
   </div>
 
 </div>
+
+<script>
+  // ===== SUPABASE CONFIG =====
+  const SUPABASE_URL = 'https://mttlbzniknvszpiugree.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10dGxiem5pa252c3pwaXVncmVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4MjI1NTUsImV4cCI6MjEwMjM5ODU1NX0.VlCjSCjXquOmRugr0w8iEjMCmIAOorbzbrjbtseC65Y';
+
+  const feedEl = document.getElementById('recado-feed');
+  const countEl = document.getElementById('recado-count');
+  const statusEl = document.getElementById('recado-status');
+  const btnEl = document.getElementById('recado-btn');
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    const meses = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+    return `${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  function renderRecado(r, idx, total) {
+    const num = String(total - idx).padStart(2, '0');
+    const nome = escapeHtml(r.nome || 'anon');
+    const link = r.link ? escapeHtml(r.link) : '';
+    const msg = escapeHtml(r.mensagem);
+    const data = fmtDate(r.created_at);
+
+    const authorHtml = link
+      ? `<a href="${link}" target="_blank" rel="noopener">${nome}</a>`
+      : nome;
+
+    return `
+      <div class="recado-item" style="animation-delay: ${idx * 0.08}s">
+        <span class="recado-num">${num}</span>
+        <div class="recado-header">
+          <span class="recado-author">${authorHtml}</span>
+          <span class="recado-date">${data}</span>
+        </div>
+        <p class="recado-text">${msg}</p>
+      </div>
+    `;
+  }
+
+  async function loadRecados() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/recados?select=*&order=created_at.desc`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error('Erro ao carregar');
+      const data = await res.json();
+
+      if (data.length === 0) {
+        feedEl.innerHTML = '<div class="recado-empty">nenhum recado ainda. seja o primeiro.</div>';
+        countEl.textContent = '0 recados';
+        return;
+      }
+
+      countEl.textContent = `${data.length} recado${data.length > 1 ? 's' : ''}`;
+      feedEl.innerHTML = data.map((r, i) => renderRecado(r, i, data.length)).join('');
+    } catch (e) {
+      feedEl.innerHTML = '<div class="recado-empty">mural temporariamente offline.</div>';
+      countEl.textContent = '---';
+    }
+  }
+
+  async function sendRecado() {
+    const nome = document.getElementById('recado-nome').value.trim();
+    const link = document.getElementById('recado-link').value.trim();
+    const mensagem = document.getElementById('recado-mensagem').value.trim();
+
+    if (!mensagem) {
+      statusEl.textContent = 'escreve alguma coisa primeiro.';
+      statusEl.className = 'recado-status err';
+      return;
+    }
+    if (mensagem.length > 500) {
+      statusEl.textContent = 'mensagem muito longa (max 500).';
+      statusEl.className = 'recado-status err';
+      return;
+    }
+
+    btnEl.disabled = true;
+    statusEl.textContent = 'enviando...';
+    statusEl.className = 'recado-status';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/recados`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          nome: nome || 'anon',
+          link: link || null,
+          mensagem: mensagem
+        })
+      });
+
+      if (!res.ok) throw new Error('Erro ao enviar');
+
+      document.getElementById('recado-nome').value = '';
+      document.getElementById('recado-link').value = '';
+      document.getElementById('recado-mensagem').value = '';
+      statusEl.textContent = 'recado enviado. obrigado.';
+      statusEl.className = 'recado-status ok';
+      loadRecados();
+    } catch (e) {
+      statusEl.textContent = 'algo deu errado. tenta de novo.';
+      statusEl.className = 'recado-status err';
+    } finally {
+      btnEl.disabled = false;
+    }
+  }
+
+  btnEl.addEventListener('click', sendRecado);
+  loadRecados();
+</script>
 
 </body>
 </html>
