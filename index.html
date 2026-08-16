@@ -1494,7 +1494,7 @@
         <div class="player-empty">nenhuma música na fila. seja o primeiro a enviar.</div>
       </div>
     </div>
-    <div class="music-note">troca automaticamente a cada 3 min</div>
+    <div class="music-note">a gente acha no youtube automaticamente. só digita o nome.</div>
 
     <div style="margin-top: 28px;">
       <div class="music-meta-row">
@@ -1502,7 +1502,6 @@
         <input type="text" id="music-artista" class="music-input-field" placeholder="artista (opcional)" maxlength="100" />
       </div>
       <input type="text" id="music-titulo" class="music-input-field" style="margin-bottom: 14px;" placeholder="nome da música *" maxlength="100" />
-      <input type="text" id="music-link" class="music-input-field" style="margin-bottom: 14px;" placeholder="link do youtube (opcional — pra tocar aqui)" maxlength="200" />
       <!-- Honeypot -->
       <input type="text" id="hp-music" class="hp-field" tabindex="-1" autocomplete="off" />
       <button id="music-btn" class="music-btn">enviar música</button>
@@ -1914,7 +1913,7 @@
     const nome = document.getElementById('music-nome').value.trim();
     const artista = document.getElementById('music-artista').value.trim();
     const titulo = document.getElementById('music-titulo').value.trim();
-    const link = document.getElementById('music-link').value.trim();
+    
     const honeypot = document.getElementById('hp-music').value.trim();
 
     if (honeypot !== '') {
@@ -1958,16 +1957,7 @@
       musicStatusEl.className = 'music-status err';
       return;
     }
-    if (link.length > 200) {
-      musicStatusEl.textContent = 'link muito longo.';
-      musicStatusEl.className = 'music-status err';
-      return;
-    }
-    if (link && !extractYouTubeId(link)) {
-      musicStatusEl.textContent = 'link do youtube inválido.';
-      musicStatusEl.className = 'music-status err';
-      return;
-    }
+    
 
     musicBtnEl.disabled = true;
     musicStatusEl.textContent = 'enviando...';
