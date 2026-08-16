@@ -1896,13 +1896,6 @@
       return;
     }
 
-    const rl = await canSubmit('recados');
-    if (!rl.ok) {
-      statusEl.textContent = rl.msg;
-      statusEl.className = 'recado-status err';
-      return;
-    }
-
     if (!mensagem) {
       statusEl.textContent = 'escreve alguma coisa primeiro.';
       statusEl.className = 'recado-status err';
@@ -1924,23 +1917,28 @@
     statusEl.className = 'recado-status';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/recados`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/send_recado`, {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          nome: nome || 'anon',
-          link: link || null,
-          mensagem: mensagem
+          p_nome: nome || null,
+          p_link: link || null,
+          p_mensagem: mensagem
         })
       });
-      if (!res.ok) throw new Error('Erro ao enviar');
+      const result = await res.json();
 
-      await markSubmitted('recados');
+      if (!res.ok || !result.success) {
+        statusEl.textContent = result.error || 'algo deu errado. tenta de novo.';
+        statusEl.className = 'recado-status err';
+        btnEl.disabled = false;
+        return;
+      }
+
       document.getElementById('recado-nome').value = '';
       document.getElementById('recado-link').value = '';
       document.getElementById('recado-mensagem').value = '';
@@ -2215,13 +2213,6 @@
       return;
     }
 
-    const rl = await canSubmit('musicas');
-    if (!rl.ok) {
-      musicStatusEl.textContent = rl.msg;
-      musicStatusEl.className = 'music-status err';
-      return;
-    }
-
     if (!titulo) {
       musicStatusEl.textContent = 'digita o nome da música.';
       musicStatusEl.className = 'music-status err';
@@ -2258,34 +2249,31 @@
     musicStatusEl.textContent = 'enviando...';
 
     try {
-      const body = {
-        nome: nome || 'anon',
-        nome_musica: itunes ? itunes.track : titulo,
-        artista: itunes ? itunes.artist : (artista || null),
-        link: itunes ? itunes.preview : null,
-        preview_url: itunes ? itunes.preview : null,
-        cover_url: itunes ? itunes.cover : null
-      };
-      console.log('Enviando:', body);
-
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/musicas`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/send_musica`, {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({
+          p_nome: nome || null,
+          p_nome_musica: itunes ? itunes.track : titulo,
+          p_artista: itunes ? itunes.artist : (artista || null),
+          p_link: itunes ? itunes.preview : null,
+          p_preview_url: itunes ? itunes.preview : null,
+          p_cover_url: itunes ? itunes.cover : null
+        })
       });
+      const result = await res.json();
 
-      if (!res.ok) {
-        const errText = await res.text();
-        console.error('Supabase error:', res.status, errText);
-        throw new Error('Erro ao enviar: ' + res.status);
+      if (!res.ok || !result.success) {
+        musicStatusEl.textContent = result.error || 'algo deu errado. tenta de novo.';
+        musicStatusEl.className = 'music-status err';
+        musicBtnEl.disabled = false;
+        return;
       }
 
-      await markSubmitted('musicas');
       document.getElementById('music-nome').value = '';
       document.getElementById('music-artista').value = '';
       document.getElementById('music-titulo').value = '';
