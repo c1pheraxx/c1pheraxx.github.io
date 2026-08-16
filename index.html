@@ -2272,7 +2272,19 @@
           p_cover_url: itunes ? itunes.cover : null
         })
       });
-      const result = await res.json();
+      let result;
+      try {
+        result = await res.json();
+      } catch (parseErr) {
+        const text = await res.text();
+        console.error('Resposta não-JSON:', res.status, text);
+        musicStatusEl.textContent = 'erro do servidor. ver console.';
+        musicStatusEl.className = 'music-status err';
+        musicBtnEl.disabled = false;
+        return;
+      }
+
+      console.log('Resposta RPC:', result);
 
       if (!res.ok || !result.success) {
         musicStatusEl.textContent = result.error || 'algo deu errado. tenta de novo.';
