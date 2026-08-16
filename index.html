@@ -1429,8 +1429,31 @@
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: var(--void); }
   ::-webkit-scrollbar-thumb { background: var(--char); border-radius: 3px; }
+
+  .recado-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .recado-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid var(--char);
+    flex-shrink: 0;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+    background: var(--soot);
+  }
+  .recado-item:hover .recado-avatar {
+    border-color: var(--rose);
+    transform: scale(1.08);
+  }
+
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='12' fill='%23050505'/%3E%3Ctext x='50' y='68' font-family='Abril Fatface, serif' font-size='58' fill='%235c0f0f' text-anchor='middle'%3EC%3C/text%3E%3C/svg%3E">
+<base target="_blank">
 <base target="_blank">
 <base target="_blank">
 </head>
@@ -1705,6 +1728,28 @@
     return `${d.getDate()} ${meses[d.getMonth()]} ${d.getFullYear()}`;
   }
 
+  
+  function getGithubUsername(link) {
+    if (!link) return null;
+    const trimmed = link.trim();
+    if (trimmed.startsWith('@')) return trimmed.slice(1);
+    try {
+      const url = new URL(trimmed);
+      if (url.hostname === 'github.com' || url.hostname === 'www.github.com') {
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (parts.length > 0 && /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$/.test(parts[0])) {
+          return parts[0];
+        }
+      }
+    } catch (e) {
+      // não é URL válida — talvez seja username cru
+      if (/^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$/.test(trimmed)) {
+        return trimmed;
+      }
+    }
+    return null;
+  }
+
   function renderRecado(r, idx, total) {
     const num = String(total - idx).padStart(2, '0');
     const nome = escapeHtml(r.nome || 'anon');
@@ -1716,10 +1761,16 @@
       ? `<a href="${link}" target="_blank" rel="noopener">${nome}</a>`
       : nome;
 
+    const ghUser = getGithubUsername(link);
+    const avatarHtml = ghUser
+      ? `<img class="recado-avatar" src="https://avatars.githubusercontent.com/${ghUser}?s=64&v=4" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : '';
+
     return `
       <div class="recado-item" style="animation-delay: ${idx * 0.08}s">
         <span class="recado-num">${num}</span>
         <div class="recado-header">
+          ${avatarHtml}
           <span class="recado-author">${authorHtml}</span>
           <span class="recado-date">${data}</span>
         </div>
