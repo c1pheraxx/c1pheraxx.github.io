@@ -1066,14 +1066,6 @@
     object-fit: cover;
     filter: grayscale(0.3) contrast(1.1);
     flex-shrink: 0;
-    position: relative;
-  }
-  .preview-cover::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 60%, rgba(90,30,30,0.15) 100%);
-    pointer-events: none;
   }
   .preview-info {
     flex: 1;
@@ -1101,7 +1093,6 @@
     opacity: 0.8;
     line-height: 1;
   }
-  /* ===== PLAYER CUSTOM ===== */
   .custom-player {
     display: flex;
     align-items: center;
@@ -1130,9 +1121,7 @@
     fill: var(--bone);
     margin-left: 1px;
   }
-  .play-btn.playing svg {
-    margin-left: 0;
-  }
+  .play-btn.playing svg { margin-left: 0; }
   .progress-wrap {
     flex: 1;
     display: flex;
@@ -1167,9 +1156,7 @@
     opacity: 0;
     transition: opacity 0.2s ease;
   }
-  .progress-bar:hover .progress-fill::after {
-    opacity: 1;
-  }
+  .progress-bar:hover .progress-fill::after { opacity: 1; }
   .time-row {
     display: flex;
     justify-content: space-between;
@@ -1178,15 +1165,6 @@
     letter-spacing: 0.08em;
     color: var(--dust);
     opacity: 0.5;
-  }
-  .preview-empty {
-    font-family: 'Caveat', cursive;
-    font-size: 16px;
-    color: var(--dust);
-    opacity: 0.4;
-    text-align: center;
-    padding: 30px 0;
-    transform: rotate(-0.5deg);
   }
   .music-note {
     font-family: 'Caveat', cursive;
@@ -1578,10 +1556,10 @@
         <div>TOCANDO AGORA</div>
       </div>
       <div id="player-container">
-        <div class="preview-empty">nenhuma música na fila. seja o primeiro a enviar.</div>
+        <div class="music-empty">nenhuma música na fila. seja o primeiro a enviar.</div>
       </div>
     </div>
-    <div class="music-note">preview de 30s — troca automaticamente</div>
+    <div class="music-note">preview de 30s — toca automaticamente</div>
 
     <div style="margin-top: 28px;">
       <div class="music-meta-row">
@@ -1589,7 +1567,6 @@
         <input type="text" id="music-artista" class="music-input-field" placeholder="artista (opcional)" maxlength="100" />
       </div>
       <input type="text" id="music-titulo" class="music-input-field" style="margin-bottom: 14px; width: 100%;" placeholder="nome da música *" maxlength="100" />
-      <!-- Honeypot -->
       <input type="text" id="hp-music" class="hp-field" tabindex="-1" autocomplete="off" />
       <button id="music-btn" class="music-btn">enviar música</button>
       <div id="music-status" class="music-status"></div>
@@ -1891,6 +1868,7 @@
       statusEl.className = 'recado-status ok';
       loadRecados();
     } catch (e) {
+      console.error('Erro recado:', e);
       statusEl.textContent = 'algo deu errado. tenta de novo.';
       statusEl.className = 'recado-status err';
     } finally {
@@ -1923,12 +1901,9 @@
           cover: t.artworkUrl100
         };
       }
-    } catch (e) { return null; }
+    } catch (e) { console.error('iTunes error:', e); return null; }
     return null;
   }
-
-  let audioPlayer = null;
-  let progressInterval = null;
 
   function formatTime(t) {
     if (!t || !isFinite(t)) return '0:00';
@@ -1974,7 +1949,7 @@
   function renderPlayer(m) {
     const container = document.getElementById('player-container');
     if (!m || !m.preview) {
-      container.innerHTML = '<div class="preview-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
+      container.innerHTML = '<div class="music-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
       return;
     }
     container.innerHTML = `
@@ -2004,7 +1979,8 @@
     `;
 
     audioPlayer = new Audio(m.preview);
-    audioPlayer.play();
+    audioPlayer.volume = 0.7;
+    audioPlayer.play().catch(() => {});
 
     const btn = container.querySelector('.play-btn');
     btn.classList.add('playing');
@@ -2012,7 +1988,6 @@
 
     audioPlayer.ontimeupdate = updateProgress;
     audioPlayer.onended = () => {
-      if (progressInterval) clearInterval(progressInterval);
       setTimeout(() => tocarProxima(), 800);
     };
     audioPlayer.onloadedmetadata = () => {
@@ -2022,7 +1997,6 @@
   }
 
   function tocarProxima() {
-    if (progressInterval) clearInterval(progressInterval);
     if (audioPlayer) { audioPlayer.pause(); audioPlayer = null; }
     const comPreview = musicasData.filter(m => m.preview_url);
     if (comPreview.length === 0) return;
@@ -2064,20 +2038,19 @@
           }
         }
       );
-      if (!res.ok) throw new Error('Erro ao carregar');
+      if (!res.ok) throw new Error('Erro ao carregar: ' + res.status);
       musicasData = await res.json();
 
       if (musicasData.length === 0) {
         musicFeedEl.innerHTML = '<div class="music-empty">nenhuma música ainda. seja o primeiro.</div>';
         musicCountEl.textContent = '0 músicas';
-        document.getElementById('player-container').innerHTML = '<div class="preview-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
+        document.getElementById('player-container').innerHTML = '<div class="music-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
         return;
       }
 
       musicCountEl.textContent = `${musicasData.length} música${musicasData.length > 1 ? 's' : ''}`;
       musicFeedEl.innerHTML = musicasData.map((m, i) => renderMusica(m, i, musicasData.length)).join('');
 
-      // Toca a primeira com preview
       const comPreview = musicasData.filter(m => m.preview_url);
       if (comPreview.length > 0) {
         renderPlayer({
@@ -2087,9 +2060,10 @@
           cover: comPreview[0].cover_url
         });
       } else {
-        document.getElementById('player-container').innerHTML = '<div class="preview-empty">nenhuma música com preview disponível.</div>';
+        document.getElementById('player-container').innerHTML = '<div class="music-empty">nenhuma música com preview disponível.</div>';
       }
     } catch (e) {
+      console.error('Erro loadMusicas:', e);
       musicFeedEl.innerHTML = '<div class="music-empty">player temporariamente offline.</div>';
       musicCountEl.textContent = '---';
     }
@@ -2147,11 +2121,26 @@
     musicStatusEl.className = 'music-status';
 
     const query = artista ? `${titulo} ${artista}` : titulo;
-    const itunes = await searchItunes(query);
+    let itunes = null;
+    try {
+      itunes = await searchItunes(query);
+    } catch (e) {
+      console.error('searchItunes error:', e);
+    }
 
     musicStatusEl.textContent = 'enviando...';
 
     try {
+      const body = {
+        nome: nome || 'anon',
+        nome_musica: itunes ? itunes.track : titulo,
+        artista: itunes ? itunes.artist : (artista || null),
+        link: itunes ? itunes.preview : null,
+        preview_url: itunes ? itunes.preview : null,
+        cover_url: itunes ? itunes.cover : null
+      };
+      console.log('Enviando:', body);
+
       const res = await fetch(`${SUPABASE_URL}/rest/v1/musicas`, {
         method: 'POST',
         headers: {
@@ -2160,16 +2149,14 @@
           'Content-Type': 'application/json',
           'Prefer': 'return=minimal'
         },
-        body: JSON.stringify({
-          nome: nome || 'anon',
-          nome_musica: itunes ? itunes.track : titulo,
-          artista: itunes ? itunes.artist : (artista || null),
-          link: itunes ? itunes.preview : null,
-          preview_url: itunes ? itunes.preview : null,
-          cover_url: itunes ? itunes.cover : null
-        })
+        body: JSON.stringify(body)
       });
-      if (!res.ok) throw new Error('Erro ao enviar');
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Supabase error:', res.status, errText);
+        throw new Error('Erro ao enviar: ' + res.status);
+      }
 
       await markSubmitted('musicas');
       document.getElementById('music-nome').value = '';
@@ -2179,6 +2166,7 @@
       musicStatusEl.className = 'music-status ok';
       loadMusicas();
     } catch (e) {
+      console.error('Erro sendMusica:', e);
       musicStatusEl.textContent = 'algo deu errado. tenta de novo.';
       musicStatusEl.className = 'music-status err';
     } finally {
