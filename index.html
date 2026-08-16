@@ -1810,18 +1810,18 @@
     statusEl.className = 'recado-status';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/recados`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/send_recado`, {
         method: 'POST',
         headers: {
           'apikey': SUPABASE_ANON_KEY,
           'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          nome: nome || 'anon',
-          link: link || null,
-          mensagem: mensagem
+          p_fp: getFingerprint(),
+          p_nome: nome || null,
+          p_link: link || null,
+          p_mensagem: mensagem
         })
       });
 
@@ -1842,6 +1842,11 @@
     } finally {
       btnEl.disabled = false;
     }
+  }
+
+  // ===== FINGERPRINT DO NAVEGADOR =====
+  function getFingerprint() {
+    return btoa(navigator.userAgent + '|' + screen.width + 'x' + screen.height + '|' + navigator.language);
   }
 
   // ===== RATE LIMIT 24H POR IP =====
@@ -1925,6 +1930,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          p_fp: getFingerprint(),
           p_nome: nome || null,
           p_link: link || null,
           p_mensagem: mensagem
@@ -2257,6 +2263,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          p_fp: getFingerprint(),
           p_nome: nome || null,
           p_nome_musica: itunes ? itunes.track : titulo,
           p_artista: itunes ? itunes.artist : (artista || null),
