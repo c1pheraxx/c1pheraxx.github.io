@@ -1011,11 +1011,11 @@
   }
 
 
-  /* ===== MÚSICAS ===== */
+  /* ===== MÚSICAS / PREVIEW ===== */
   .music-player-wrap {
     background: linear-gradient(170deg, rgba(12,12,12,0.7), rgba(4,4,4,0.85));
     border-left: 3px solid var(--gore);
-    padding: 22px 24px;
+    padding: 24px;
     position: relative;
     margin-bottom: 28px;
     backdrop-filter: blur(2px);
@@ -1038,7 +1038,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     font-family: 'Space Mono', monospace;
     font-size: 9px;
     letter-spacing: 0.2em;
@@ -1049,39 +1049,61 @@
     width: 28px; height: 1.5px;
     background: var(--gore);
   }
-  .now-playing-text {
-    color: var(--parchment);
-    opacity: 0.9;
-  }
   .play-dot {
     width: 7px; height: 7px;
     background: var(--blood);
     border-radius: 50%;
     animation: pulse 1.5s ease-in-out infinite;
   }
-  .player-frame {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: 1px solid var(--char);
-    background: var(--void);
-  }
-  .player-frame iframe {
-    width: 100%; height: 100%;
-    border: none;
-    display: block;
-  }
-  .player-empty {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: 1px solid var(--char);
+  .preview-card {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-family: 'Caveat', cursive;
+    gap: 18px;
+  }
+  .preview-cover {
+    width: 80px; height: 80px;
+    border: 1px solid var(--char);
+    object-fit: cover;
+    filter: grayscale(0.3) contrast(1.1);
+    flex-shrink: 0;
+  }
+  .preview-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .preview-track {
+    font-family: 'Oswald', sans-serif;
     font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .preview-artist {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
     color: var(--dust);
-    opacity: 0.5;
-    background: rgba(4,4,4,0.5);
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+  .preview-audio {
+    width: 100%;
+    margin-top: 12px;
+    height: 28px;
+    filter: sepia(0.6) saturate(2) hue-rotate(-50deg) contrast(0.9);
+    opacity: 0.8;
+  }
+  .preview-empty {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--dust);
+    opacity: 0.4;
+    text-align: center;
+    padding: 30px 0;
+    transform: rotate(-0.5deg);
   }
   .music-note {
     font-family: 'Caveat', cursive;
@@ -1110,23 +1132,6 @@
   }
   .music-input-field::placeholder { color: var(--dust); opacity: 0.5; }
   .music-input-field:focus { border-color: var(--rust); }
-  .music-textarea {
-    width: 100%;
-    background: linear-gradient(160deg, rgba(8,8,8,0.75), rgba(4,4,4,0.9));
-    border: 1px solid var(--char);
-    padding: 14px 16px;
-    color: var(--bone);
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    line-height: 1.5;
-    resize: vertical;
-    min-height: 60px;
-    outline: none;
-    transition: border-color 0.3s ease;
-    margin-bottom: 14px;
-  }
-  .music-textarea::placeholder { color: var(--dust); opacity: 0.6; }
-  .music-textarea:focus { border-color: var(--rust); }
   .music-btn {
     font-family: 'Oswald', sans-serif;
     font-size: 10px;
@@ -1488,20 +1493,19 @@
       <div class="now-playing-row">
         <div class="play-dot"></div>
         <div>TOCANDO AGORA</div>
-        <div class="now-playing-text" id="now-playing-text">carregando...</div>
       </div>
-      <div id="player-container" class="player-frame">
-        <div class="player-empty">nenhuma música na fila. seja o primeiro a enviar.</div>
+      <div id="player-container">
+        <div class="preview-empty">nenhuma música na fila. seja o primeiro a enviar.</div>
       </div>
     </div>
-    <div class="music-note">a gente acha no youtube automaticamente. só digita o nome.</div>
+    <div class="music-note">preview de 30s — troca automaticamente</div>
 
     <div style="margin-top: 28px;">
       <div class="music-meta-row">
         <input type="text" id="music-nome" class="music-input-field" placeholder="seu nome (opcional)" maxlength="30" />
         <input type="text" id="music-artista" class="music-input-field" placeholder="artista (opcional)" maxlength="100" />
       </div>
-      <input type="text" id="music-titulo" class="music-input-field" style="margin-bottom: 14px;" placeholder="nome da música *" maxlength="100" />
+      <input type="text" id="music-titulo" class="music-input-field" style="margin-bottom: 14px; width: 100%;" placeholder="nome da música *" maxlength="100" />
       <!-- Honeypot -->
       <input type="text" id="hp-music" class="hp-field" tabindex="-1" autocomplete="off" />
       <button id="music-btn" class="music-btn">enviar música</button>
@@ -1732,7 +1736,7 @@
     localStorage.setItem(key, Date.now().toString());
   }
 
-  // ===== RECADOS (atualizado: rate limit 24h) =====
+  // ===== RECADOS (rate limit 24h) =====
   async function sendRecado() {
     const nome = document.getElementById('recado-nome').value.trim();
     const link = document.getElementById('recado-link').value.trim();
@@ -1752,7 +1756,6 @@
       return;
     }
 
-    // Rate limit 24h
     const rl = await canSubmit('recados');
     if (!rl.ok) {
       statusEl.textContent = rl.msg;
@@ -1812,20 +1815,69 @@
     }
   }
 
-  // ===== MÚSICAS =====
+  // ===== MÚSICAS / PREVIEW 30s =====
   const musicFeedEl = document.getElementById('music-feed');
   const musicCountEl = document.getElementById('music-count');
   const musicStatusEl = document.getElementById('music-status');
   const musicBtnEl = document.getElementById('music-btn');
   let musicasData = [];
   let musicaAtualIdx = 0;
-  let playerInterval = null;
+  let audioPlayer = null;
 
-  function extractYouTubeId(url) {
-    if (!url) return null;
-    const reg = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
-    const m = url.match(reg);
-    return m ? m[1] : null;
+  async function searchItunes(query) {
+    try {
+      const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=1`, {
+        cache: 'no-store'
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        const t = data.results[0];
+        return {
+          track: t.trackName,
+          artist: t.artistName,
+          preview: t.previewUrl,
+          cover: t.artworkUrl100
+        };
+      }
+    } catch (e) { return null; }
+    return null;
+  }
+
+  function renderPlayer(m) {
+    const container = document.getElementById('player-container');
+    if (!m || !m.preview) {
+      container.innerHTML = '<div class="preview-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
+      return;
+    }
+    container.innerHTML = `
+      <div class="preview-card">
+        <img class="preview-cover" src="${m.cover || ''}" alt="cover" />
+        <div class="preview-info">
+          <div class="preview-track">${escapeHtml(m.track || m.nome_musica)}</div>
+          <div class="preview-artist">${escapeHtml(m.artist || m.artista || 'unknown')}</div>
+          <audio class="preview-audio" src="${m.preview}" controls autoplay></audio>
+        </div>
+      </div>
+    `;
+    audioPlayer = container.querySelector('audio');
+    if (audioPlayer) {
+      audioPlayer.onended = () => {
+        setTimeout(() => tocarProxima(), 500);
+      };
+    }
+  }
+
+  function tocarProxima() {
+    const comPreview = musicasData.filter(m => m.preview_url);
+    if (comPreview.length === 0) return;
+    musicaAtualIdx = (musicaAtualIdx + 1) % comPreview.length;
+    renderPlayer({
+      track: comPreview[musicaAtualIdx].nome_musica,
+      artist: comPreview[musicaAtualIdx].artista,
+      preview: comPreview[musicaAtualIdx].preview_url,
+      cover: comPreview[musicaAtualIdx].cover_url
+    });
   }
 
   function renderMusica(m, idx, total) {
@@ -1834,11 +1886,12 @@
     const titulo = escapeHtml(m.nome_musica);
     const artista = m.artista ? ` — ${escapeHtml(m.artista)}` : '';
     const data = fmtDate(m.created_at);
+    const hasPreview = m.preview_url ? '▶ ' : '♪ ';
     return `
       <div class="music-item" style="animation-delay: ${idx * 0.08}s">
         <span class="music-num">${num}</span>
         <div class="music-header">
-          <span class="music-title">${titulo}${artista}</span>
+          <span class="music-title">${hasPreview}${titulo}${artista}</span>
         </div>
         <div class="music-meta">enviado por ${nome} &middot; ${data}</div>
       </div>
@@ -1862,58 +1915,35 @@
       if (musicasData.length === 0) {
         musicFeedEl.innerHTML = '<div class="music-empty">nenhuma música ainda. seja o primeiro.</div>';
         musicCountEl.textContent = '0 músicas';
-        document.getElementById('now-playing-text').textContent = 'nada na fila';
-        document.getElementById('player-container').innerHTML = '<div class="player-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
+        document.getElementById('player-container').innerHTML = '<div class="preview-empty">nenhuma música na fila. seja o primeiro a enviar.</div>';
         return;
       }
 
       musicCountEl.textContent = `${musicasData.length} música${musicasData.length > 1 ? 's' : ''}`;
       musicFeedEl.innerHTML = musicasData.map((m, i) => renderMusica(m, i, musicasData.length)).join('');
-      iniciarPlayer();
+
+      // Toca a primeira com preview
+      const comPreview = musicasData.filter(m => m.preview_url);
+      if (comPreview.length > 0) {
+        renderPlayer({
+          track: comPreview[0].nome_musica,
+          artist: comPreview[0].artista,
+          preview: comPreview[0].preview_url,
+          cover: comPreview[0].cover_url
+        });
+      } else {
+        document.getElementById('player-container').innerHTML = '<div class="preview-empty">nenhuma música com preview disponível.</div>';
+      }
     } catch (e) {
       musicFeedEl.innerHTML = '<div class="music-empty">player temporariamente offline.</div>';
       musicCountEl.textContent = '---';
     }
   }
 
-  function iniciarPlayer() {
-    const comLink = musicasData.filter(m => extractYouTubeId(m.link));
-    if (comLink.length === 0) {
-      document.getElementById('now-playing-text').textContent = 'nada na fila (envie com link do youtube)';
-      document.getElementById('player-container').innerHTML = '<div class="player-empty">nenhuma música com link. envie um link do youtube para tocar aqui.</div>';
-      return;
-    }
-    tocarMusica(0);
-    if (playerInterval) clearInterval(playerInterval);
-    playerInterval = setInterval(() => {
-      let next = musicaAtualIdx + 1;
-      if (next >= comLink.length) next = 0;
-      tocarMusica(next);
-    }, 3 * 60 * 1000);
-  }
-
-  function tocarMusica(idx) {
-    const comLink = musicasData.filter(m => extractYouTubeId(m.link));
-    if (comLink.length === 0) return;
-    musicaAtualIdx = idx;
-    const m = comLink[idx];
-    const vid = extractYouTubeId(m.link);
-    const titulo = escapeHtml(m.nome_musica);
-    const artista = m.artista ? ` — ${escapeHtml(m.artista)}` : '';
-    document.getElementById('now-playing-text').textContent = `${titulo}${artista}`;
-    document.getElementById('player-container').innerHTML = `
-      <iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    `;
-  }
-
   async function sendMusica() {
     const nome = document.getElementById('music-nome').value.trim();
     const artista = document.getElementById('music-artista').value.trim();
     const titulo = document.getElementById('music-titulo').value.trim();
-    
     const honeypot = document.getElementById('hp-music').value.trim();
 
     if (honeypot !== '') {
@@ -1925,7 +1955,6 @@
         document.getElementById('music-nome').value = '';
         document.getElementById('music-artista').value = '';
         document.getElementById('music-titulo').value = '';
-        document.getElementById('music-link').value = '';
       }, 800);
       return;
     }
@@ -1957,11 +1986,15 @@
       musicStatusEl.className = 'music-status err';
       return;
     }
-    
 
     musicBtnEl.disabled = true;
-    musicStatusEl.textContent = 'enviando...';
+    musicStatusEl.textContent = 'procurando preview...';
     musicStatusEl.className = 'music-status';
+
+    const query = artista ? `${titulo} ${artista}` : titulo;
+    const itunes = await searchItunes(query);
+
+    musicStatusEl.textContent = 'enviando...';
 
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/musicas`, {
@@ -1974,9 +2007,11 @@
         },
         body: JSON.stringify({
           nome: nome || 'anon',
-          nome_musica: titulo,
-          artista: artista || null,
-          link: link || null
+          nome_musica: itunes ? itunes.track : titulo,
+          artista: itunes ? itunes.artist : (artista || null),
+          link: itunes ? itunes.preview : null,
+          preview_url: itunes ? itunes.preview : null,
+          cover_url: itunes ? itunes.cover : null
         })
       });
       if (!res.ok) throw new Error('Erro ao enviar');
@@ -1985,8 +2020,7 @@
       document.getElementById('music-nome').value = '';
       document.getElementById('music-artista').value = '';
       document.getElementById('music-titulo').value = '';
-      document.getElementById('music-link').value = '';
-      musicStatusEl.textContent = 'música enviada. obrigado.';
+      musicStatusEl.textContent = itunes ? 'música enviada. preview carregado.' : 'música enviada. (preview não encontrado)';
       musicStatusEl.className = 'music-status ok';
       loadMusicas();
     } catch (e) {
