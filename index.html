@@ -1166,6 +1166,55 @@
     color: var(--dust);
     opacity: 0.5;
   }
+  /* ===== VOLUME ===== */
+  .volume-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+  .volume-icon {
+    width: 14px; height: 14px;
+    fill: var(--dust);
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+  .volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 70px;
+    height: 3px;
+    background: var(--char);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  .volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: var(--bone);
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .volume-slider::-webkit-slider-thumb:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    background: var(--parchment);
+  }
+  .volume-slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    background: var(--bone);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    opacity: 0.7;
+  }
   .music-note {
     font-family: 'Caveat', cursive;
     font-size: 13px;
@@ -1937,6 +1986,10 @@
     }
   }
 
+  function setVolume(val) {
+    if (audioPlayer) audioPlayer.volume = val / 100;
+  }
+
   function seek(e) {
     if (!audioPlayer) return;
     const bar = e.currentTarget;
@@ -1972,6 +2025,12 @@
                 <span class="time-current">0:00</span>
                 <span class="time-duration">0:30</span>
               </div>
+            </div>
+            <div class="volume-wrap">
+              <svg class="volume-icon" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+              </svg>
+              <input type="range" class="volume-slider" min="0" max="100" value="70" oninput="setVolume(this.value)">
             </div>
           </div>
         </div>
