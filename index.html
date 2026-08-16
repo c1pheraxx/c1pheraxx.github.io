@@ -43,7 +43,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ===== VIDEO BACKGROUND ===== */
   .video-bg {
     position: fixed;
     top: 0; left: 0;
@@ -80,7 +79,6 @@
     background: radial-gradient(ellipse at center, transparent 30%, rgba(5,5,5,0.75) 100%);
   }
 
-  /* Grain & scanlines */
   body::before {
     content: '';
     position: fixed;
@@ -104,7 +102,6 @@
     background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(180,170,150,0.03) 2px, rgba(180,170,150,0.03) 4px);
   }
 
-  /* ===== ANIMATIONS ===== */
   @keyframes reveal {
     from { opacity: 0; transform: translateY(30px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
@@ -132,7 +129,6 @@
   .d7 { animation-delay: 1.3s; }
   .d8 { animation-delay: 1.5s; }
 
-  /* ===== LAYOUT ===== */
   .page {
     max-width: 600px;
     margin: 0 auto;
@@ -141,7 +137,6 @@
     z-index: 10;
   }
 
-  /* ===== HERO ===== */
   .hero {
     position: relative;
     padding: 20px 0 80px;
@@ -289,8 +284,6 @@
     border-bottom: 1px solid var(--char);
     padding-bottom: 2px;
   }
-
-  /* CAP Shield */
   .cap-shield {
     position: absolute;
     top: 95px; left: -8px;
@@ -301,7 +294,6 @@
   }
   .hero:hover .cap-shield { opacity: 0.3; }
   .cap-shield svg { width: 48px; height: 60px; }
-
   .scribble-star {
     position: absolute;
     top: 160px; left: -30px;
@@ -333,7 +325,6 @@
   .tape-1 { top: 45px; left: -25px; width: 55px; height: 16px; transform: rotate(-28deg); }
   .tape-2 { bottom: 65px; right: -5px; width: 40px; height: 14px; transform: rotate(18deg); }
 
-  /* ===== SECTIONS ===== */
   .section {
     margin-bottom: 60px;
     position: relative;
@@ -367,7 +358,6 @@
     max-width: 80px;
   }
 
-  /* ===== ABOUT ===== */
   .about-box {
     background: linear-gradient(160deg, rgba(8,8,8,0.75), rgba(4,4,4,0.9));
     border: 1px solid var(--char);
@@ -438,7 +428,6 @@
     transform: translateY(-2px) rotate(-0.8deg);
   }
 
-  /* ===== CURRENTLY ===== */
   .currently-wrap {
     position: relative;
     margin-left: 6px;
@@ -512,7 +501,6 @@
     z-index: 0;
   }
 
-  /* ===== LINKS ===== */
   .link-list { list-style: none; }
   .link-list li {
     position: relative;
@@ -561,7 +549,6 @@
     transition: all 0.2s ease;
   }
 
-  /* ===== DISCORD JINX ===== */
   .discord-jinx {
     position: relative;
     display: flex;
@@ -740,6 +727,16 @@
   .recado-status.ok { color: #2a5c2a; }
   .recado-status.err { color: var(--blood); }
 
+  /* Honeypot — invisível para humanos */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+  }
+
   .recado-divider {
     width: 100%;
     height: 1px;
@@ -843,7 +840,6 @@
     padding: 20px 0;
   }
 
-  /* ===== SPOTIFY ===== */
   .spotify-box {
     border: 1px solid var(--char);
     padding: 24px;
@@ -889,7 +885,6 @@
     transform: rotate(-1deg);
   }
 
-  /* ===== FOOTER ===== */
   .footer {
     margin-top: 80px;
     padding-top: 28px;
@@ -920,7 +915,6 @@
     transform: rotate(2deg);
   }
 
-  /* ===== SIGNATURE ===== */
   .signature-wrap {
     margin-top: 60px;
     padding-top: 32px;
@@ -955,7 +949,6 @@
     text-transform: uppercase;
   }
 
-  /* ===== MICRO ===== */
   .micro {
     position: absolute;
     pointer-events: none;
@@ -971,7 +964,6 @@
   .m4 { top: 760px; left: -35px; transform: rotate(90deg); }
   .m5 { bottom: 160px; right: -30px; }
 
-  /* ===== SCRATCHES & HALFTONE ===== */
   .scratch {
     position: fixed;
     pointer-events: none;
@@ -995,7 +987,6 @@
   .ht1 { top: 5%; right: 3%; width: 200px; height: 200px; }
   .ht2 { bottom: 10%; left: 1%; width: 160px; height: 160px; }
 
-  /* ===== RESPONSIVE ===== */
   @media (max-width: 640px) {
     .page { padding: 30px 16px 50px; }
     .name-main, .name-shadow, .name-chroma { font-size: clamp(52px, 17vw, 70px); }
@@ -1028,7 +1019,6 @@
 </head>
 <body>
 
-<!-- VIDEO BACKGROUND -->
 <div class="video-bg">
   <iframe src="https://streamable.com/e/9whoio?autoplay=1&muted=1&nocontrols=1" 
     allow="fullscreen;autoplay" allowfullscreen frameborder="0" scrolling="no"></iframe>
@@ -1036,20 +1026,17 @@
 <div class="video-overlay"></div>
 <div class="vignette"></div>
 
-<!-- Scratches -->
 <div class="scratch sc1"></div>
 <div class="scratch sc2"></div>
 <div class="scratch sc3"></div>
 <div class="scratch sc4"></div>
 <div class="scratch sc5"></div>
 
-<!-- Halftone -->
 <div class="halftone ht1"></div>
 <div class="halftone ht2"></div>
 
 <div class="page">
 
-  <!-- ===== HERO ===== -->
   <header class="hero anim-reveal d1">
     <svg class="hero-cross" width="80" height="110" viewBox="0 0 80 110">
       <path d="M40 5 Q42 30 40 50 Q38 75 41 105" stroke="var(--bone)" stroke-width="2" fill="none" stroke-linecap="round"/>
@@ -1133,7 +1120,6 @@
   <div class="micro m4">SIDE B</div>
   <div class="micro m5">PLAY LOUD</div>
 
-  <!-- ===== ABOUT ===== -->
   <section class="section anim-tilt d3">
     <div class="sec-num">01</div>
     <div class="sec-label">About Me</div>
@@ -1148,7 +1134,6 @@
     </div>
   </section>
 
-  <!-- ===== CURRENTLY ===== -->
   <section class="section anim-right d4">
     <div class="sec-num">02</div>
     <div class="sec-label">Currently</div>
@@ -1168,7 +1153,6 @@
     </div>
   </section>
 
-  <!-- ===== LINKS ===== -->
   <section class="section anim-reveal d5">
     <div class="sec-num">03</div>
     <div class="sec-label">Links</div>
@@ -1202,7 +1186,6 @@
     </ul>
   </section>
 
-  <!-- ===== RECADOS ===== -->
   <section class="section anim-reveal d6" id="recados">
     <div class="sec-num">04</div>
     <div class="sec-label">Deixe um recado</div>
@@ -1212,6 +1195,8 @@
         <input type="text" id="recado-nome" class="recado-input-field" placeholder="quem é você?" maxlength="30" />
         <input type="text" id="recado-link" class="recado-input-field" placeholder="@ ou link (opcional)" maxlength="60" />
       </div>
+      <!-- Honeypot: invisível para humanos, bots preenchem -->
+      <input type="text" id="hp-website" class="hp-field" tabindex="-1" autocomplete="off" />
       <textarea id="recado-mensagem" class="recado-textarea" placeholder="escreve o que quiser..." maxlength="500"></textarea>
     </div>
     <button id="recado-btn" class="recado-btn">enviar recado</button>
@@ -1224,7 +1209,6 @@
     </div>
   </section>
 
-  <!-- ===== SPOTIFY ===== -->
   <section class="section anim-reveal d7">
     <div class="sec-num">05</div>
     <div class="sec-label">Now Playing</div>
@@ -1237,13 +1221,11 @@
     <div class="vinyl-note">skip if you want, i don&apos;t care</div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
   <footer class="footer anim-reveal d8">
     <div class="footer-left">CIPHERA &copy; 2026</div>
     <div class="footer-right">made at 3am probably</div>
   </footer>
 
-  <!-- ===== SIGNATURE ===== -->
   <div class="signature-wrap">
     <div class="signature-line"></div>
     <svg class="signature-svg" viewBox="0 0 180 60" xmlns="http://www.w3.org/2000/svg">
@@ -1268,6 +1250,10 @@
   const countEl = document.getElementById('recado-count');
   const statusEl = document.getElementById('recado-status');
   const btnEl = document.getElementById('recado-btn');
+
+  // Rate limit: 30 segundos entre envios
+  const RATE_LIMIT_MS = 30000;
+  const RATE_KEY = 'ciphera_last_recado';
 
   function escapeHtml(text) {
     const div = document.createElement('div');
@@ -1306,12 +1292,16 @@
 
   async function loadRecados() {
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/recados?select=*&order=created_at.desc`, {
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      // Só carrega os últimos 50 recados
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/recados?select=*&order=created_at.desc&limit=50`,
+        {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
         }
-      });
+      );
       if (!res.ok) throw new Error('Erro ao carregar');
       const data = await res.json();
 
@@ -1333,7 +1323,34 @@
     const nome = document.getElementById('recado-nome').value.trim();
     const link = document.getElementById('recado-link').value.trim();
     const mensagem = document.getElementById('recado-mensagem').value.trim();
+    const honeypot = document.getElementById('hp-website').value.trim();
 
+    // 1. Honeypot check (bots preenchem, humanos não)
+    if (honeypot !== '') {
+      statusEl.textContent = 'enviando...';
+      statusEl.className = 'recado-status';
+      // Simula sucesso para não dar dica pro bot
+      setTimeout(() => {
+        statusEl.textContent = 'recado enviado. obrigado.';
+        statusEl.className = 'recado-status ok';
+        document.getElementById('recado-nome').value = '';
+        document.getElementById('recado-link').value = '';
+        document.getElementById('recado-mensagem').value = '';
+      }, 800);
+      return;
+    }
+
+    // 2. Rate limit check
+    const lastSend = sessionStorage.getItem(RATE_KEY);
+    const now = Date.now();
+    if (lastSend && (now - parseInt(lastSend)) < RATE_LIMIT_MS) {
+      const waitSec = Math.ceil((RATE_LIMIT_MS - (now - parseInt(lastSend))) / 1000);
+      statusEl.textContent = `calma aí. espera ${waitSec}s.`;
+      statusEl.className = 'recado-status err';
+      return;
+    }
+
+    // 3. Validação básica
     if (!mensagem) {
       statusEl.textContent = 'escreve alguma coisa primeiro.';
       statusEl.className = 'recado-status err';
@@ -1341,6 +1358,11 @@
     }
     if (mensagem.length > 500) {
       statusEl.textContent = 'mensagem muito longa (max 500).';
+      statusEl.className = 'recado-status err';
+      return;
+    }
+    if (nome.length > 30) {
+      statusEl.textContent = 'nome muito longo (max 30).';
       statusEl.className = 'recado-status err';
       return;
     }
@@ -1366,6 +1388,9 @@
       });
 
       if (!res.ok) throw new Error('Erro ao enviar');
+
+      // Salva timestamp do rate limit
+      sessionStorage.setItem(RATE_KEY, String(Date.now()));
 
       document.getElementById('recado-nome').value = '';
       document.getElementById('recado-link').value = '';
